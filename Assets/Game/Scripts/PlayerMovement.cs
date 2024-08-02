@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,13 +17,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
-        if(Input.GetAxisRaw("Horizontal") > 0f) {
-            mb.velocity = new Vector2(moveSpeed, mb.velocity.y);
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+
+        if (Input.touchCount > 0) {
+            Touch touch = Input.GetTouch(0);
+            if (touch.position.x < Screen.width / 2) {
+                horizontalInput = -1f;
+            } else if (touch.position.x > Screen.width / 2) {
+                horizontalInput = 1f;
+            }
         }
 
-        if (Input.GetAxisRaw("Horizontal") < 0f) {
-            mb.velocity = new Vector2(-moveSpeed, mb.velocity.y);
-        }
+        mb.velocity = new Vector2(horizontalInput * moveSpeed, mb.velocity.y);
     }
 
     public void PlatformMove(float x) {
